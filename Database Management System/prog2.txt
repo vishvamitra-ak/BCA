@@ -1,0 +1,55 @@
+create table customer(cust_id int primary key,cust_name varchar(20),city varchar(20));
+
+create table orders(order_no int primary key,order_date date,cust_id int references customer,order_amt int);
+
+create table item(item_no int primary key,unit_price int);
+
+create table order_item(order_no int references orders,item_no int references item,qty int);
+
+create table warehouse(warehouse_no int primary key,w_city varchar(20));
+
+create table shipment(order_no int references item,warehouse_no int references warehouse,ship_date date);
+
+insert into customer values('1','Abc','Dharwad');
+insert into customer values('2','Def','Hubli');
+insert into customer values('3','Ghi','Belgaum');
+insert into customer values('4','Jkl','Bengaluru');
+insert into customer values('5','Mno','Davanagere');
+
+insert into orders values('1','1/Jan/2018','1','100');
+insert into orders values('2','2/Jan/2018','2','200');
+insert into orders values('3','3/Jan/2018','3','300');
+insert into orders values('4','4/Jan/2018','4','400');
+insert into orders values('5','5/Jan/2018','5','500');
+
+insert into item values('1','10');
+insert into item values('2','20');
+insert into item values('3','30');
+insert into item values('4','40');
+insert into item values('5','50');
+
+insert into order_item values('1','1','10');
+insert into order_item values('2','2','10');
+insert into order_item values('3','3','10');
+insert into order_item values('4','4','10');
+insert into order_item values('5','5','10');
+
+insert into warehouse values('111','Hubli');
+insert into warehouse values('222','Dharwad');
+insert into warehouse values('333','Bengaluru');
+insert into warehouse values('444','Chennai');
+insert into warehouse values('555','Mumbai');
+
+insert into shipment values('1','111','1/feb/2018');
+insert into shipment values('2','222','2/feb/2018');
+insert into shipment values('3','333','3/feb/2018');
+insert into shipment values('4','444','4/feb/2018');
+insert into shipment values('5','555','5/feb/2018');
+
+select c.cust_name,count(o.order_no),avg(o.order_amt) from customer c,orders o where c.cust_id=o.cust_id group by c.cust_name
+
+select o.order_no from orders o,shipment s,warehouse w where o.order_no=s.order_no and w.warehouse_no=s.warehouse_no and w.w_city='Dharwad';
+
+select order_no from orders where order_no in(select order_no from shipment where warehouse_no in (select warehouse_no from warehouse where w_city='Dharwad'))
+
+select c.cust_id,c.cust_name,o.order_date,s.ship_date from customer c,orders o,shipment s where c.cust_id=o.cust_id and o.order_no=s.order_no;

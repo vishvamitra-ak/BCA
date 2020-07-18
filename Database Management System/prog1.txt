@@ -1,0 +1,53 @@
+create table person(driver_id varchar(20) primary key,name varchar(20),address varchar(20));
+
+create table car(reg_no varchar(20) primary key,model varchar(20),year int);
+
+create table accident(report_no int primary key,dat date,location varchar(20));
+
+create table owns(driver_id varchar(20) references person,reg_no varchar(20) references car);
+
+create table participated(driver_id varchar(20) references person,reg_no varchar(20) references car,report_no int references accident,dmg_amt int);
+
+
+insert into person values('1','A','Dharwad');
+insert into person values('2','B','Dharwad');
+insert into person values('3','C','Dharwad');
+insert into person values('4','D','Dharwad');
+insert into person values('5','E','Dharwad');
+
+
+insert into car values('111','Toyota','2017');
+insert into car values('222','Ford','2017');
+insert into car values('333','Hyundai','2017');
+insert into car values('444','Tata','2017');
+insert into car values('555','BMW','2017');
+
+
+insert into accident values('123','1/Jan/18','Dharwad');
+insert into accident values('456','2/Feb/18','Hubli');
+insert into accident values('789','3/Mar/18','Dharwad');
+insert into accident values('234','4/Apr/18','Hubli');
+insert into accident values('345','5/May/18','Dharwad');
+
+
+insert into owns values('1','111');
+insert into owns values('2','222');
+insert into owns values('3','333');
+insert into owns values('4','444');
+insert into owns values('5','555');
+
+
+insert into participated values('1','111','123','1000');
+insert into participated values('2','222','456','2000');
+insert into participated values('3','333','789','3000');
+insert into participated values('4','444','234','4000');
+insert into participated values('5','555','345','5000');
+
+
+update participated set dmg_amt='25000' where reg_no='555';
+
+update accident set dat='05-May-2002' where report_no='345';
+
+select count(distinct(a.report_no)) from accident a,participated p where a.report_no=p.report_no and to_char(a.dat,'yyyy')='2002';
+
+select count(c.reg_no) from car c,participated p where c.reg_no=p.reg_no and model='BMW';

@@ -1,0 +1,31 @@
+create table branc(br_name varchar(20) primary key,br_city varchar(20),assets int);
+create table accoun(accno int primary key,br_name varchar(20) references branc,bal int);
+create table custome(cust_name varchar(20),cust_st varchar(20),cust_city varchar(20),accno int references accoun);
+
+insert into branc values('A','Dwd','100000');
+insert into branc values('main','Hubli','200000');
+insert into branc values('sub','Hubli','250000');
+insert into branc values('C','Bgm','300000');
+insert into branc values('D','Blr','400000');
+insert into branc values('E','dvg','500000');
+
+insert into accoun values('111','main','100');
+insert into accoun values('222','A','100');
+insert into accoun values('333','main','100');
+insert into accoun values('444','C','100');
+insert into accoun values('555','main','100');
+insert into accoun values('666','sub','200');
+
+
+insert into custome values('V','Ab st','Hubli','111');
+insert into custome values('W','Cd st','Hubli','222');
+insert into custome values('X','Ef st','Bgm','333');
+insert into custome values('Y','Gh st','Blr','444');
+insert into custome values('Z','Ij st','dvg','555');
+insert into custome values('V','Ab st','Hubli','666');
+
+
+
+select c.cust_name,a.accno,b.br_name from custome c,accoun a,branc b where a.br_name='main' and b.br_name=a.br_name and a.accno=c.accno;
+
+select c.cust_name,a.accno,b.br_name from custome c,accoun a, branc b where c.cust_city='Hubli' and b.br_city=c.cust_city and a.accno=c.accno and b.br_name=a.br_name;

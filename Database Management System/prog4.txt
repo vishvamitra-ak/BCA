@@ -1,0 +1,48 @@
+create table author(author_id int primary key,name varchar(20),city varchar(20),country varchar(20));
+
+create table publisher(pub_id int primary key,name varchar(20),city varchar(20),country varchar(20));
+
+create table category(category_id int primary key,description varchar(20));
+
+create table catelog(book_id int primary key,title varchar(20),author_id int references author,pub_id int references publisher,category_id int references category,year int,price int);
+
+create table order_details(order_no int primary key,book_id int references catelog,qty int);
+
+insert into author values('1','Abc','Dwd','India');
+insert into author values('2','Def','Hubli','India');
+insert into author values('3','Ghi','Belgaum','India');
+insert into author values('4','Jkl','Bengaluru','India');
+insert into author values('5','Mno','Bellary','India');
+
+insert into publisher values('111','SAM','Dwd','India');
+insert into publisher values('222','Pearson','Hubli','India');
+insert into publisher values('333','MIT Press','Belgaum','India');
+insert into publisher values('444','Oracle Press','Bengaluru','India');
+insert into publisher values('555','Phi','Bellary','India');
+
+insert into category values('121','Xyz');
+insert into category values('122','Xyy');
+insert into category values('123','Xyx');
+insert into category values('124','Xys');
+insert into category values('125','Xyh');
+
+insert into catelog values('211','AAA','1','111','121','2010','599');
+insert into catelog values('212','BBB','2','222','122','2011','699');
+insert into catelog values('213','CCC','3','333','123','2012','799');
+insert into catelog values('214','DDD','4','444','124','2013','899');
+insert into catelog values('215','EEE','5','555','125','2014','999');
+
+insert into order_details values('311','211','100');
+insert into order_details values('312','212','200');
+insert into order_details values('313','213','300');12:01 PM 7/30/2018
+insert into order_details values('314','214','400');
+insert into order_details values('315','215','500');
+
+
+select c.author_id,a.name from author a,catelog c where a.author_id=c.author_id and c.year>2000 and c.price>(select avg(c.price) from catelog c) group by c.author_id,a.name having count(c.author_id)>=1;
+
+insert into catelog values('216','FFF','1','111','121','2011','599');
+
+select ca.book_id,ca.title,a.name,a.city,a.country from catelog ca,author a,order_details o where a.author_id=ca.author_id and o.book_id=ca.book_id and o.qty in(select max(qty) from order_details);
+
+update catelog set price=price*(10/100)+price where pub_id in (select pub_id from publisher p where p.name='SAM');

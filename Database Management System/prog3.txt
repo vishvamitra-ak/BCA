@@ -1,0 +1,71 @@
+create table student(reg_no varchar(20) primary key,name varchar(20),major varchar(20),bdate date);
+
+create table course(course_no varchar(20) primary key,cname varchar(20),dept varchar(20));
+
+create table enroll(reg_no varchar(20) references student,course_no varchar(20) references course,sem varchar(20),marks int);
+
+create table text(book_ISBN int primary key,book_title varchar(20),publisher varchar(20),author varchar(20));
+
+create table adoption(course_no varchar(20) references course,sem varchar(20),book_ISBN int references text);
+
+insert into student values('A1','ABC','OS','1/Jan/2000');
+insert into student values('A2','DEF','OR','2/Jan/2000');
+insert into student values('A3','GHI','Java','3/Jan/2000');
+insert into student values('A4','JKL','DBMS','4/Jan/2000');
+insert into student values('A5','MNO','SE','5/Jan/2000');
+
+insert into course values('1','BCA','CS');
+insert into course values('2','BSc CS','CS');
+insert into course values('3','BCom','Commerce');
+insert into course values('4','MCA','CS');
+insert into course values('5','MSc CS','CS');
+
+insert into enroll values('A1','1','1','99');
+insert into enroll values('A2','2','1','98');
+insert into enroll values('A3','3','1','97');
+insert into enroll values('A4','4','1','96');
+insert into enroll values('A5','5','1','95');
+
+insert into text values('10001','OS','McGrawHill','Balagurusamy');
+insert into text values('10002','OR','Pearson','Herbert Schildt');
+insert into text values('10003','Java','SAM','Munro');
+insert into text values('10004','DBMS','MIT Press','Adolf Hitler');
+insert into text values('10005','SE','Oracle Press','Donald Trump');
+
+insert into adoption values('1','1','10001');
+insert into adoption values('2','1','10002');
+insert into adoption values('3','1','10003');
+insert into adoption values('4','1','10004');
+insert into adoption values('5','1','10005');
+
+insert into text values('10006','SE-Simplified','Pearson','Rahul Gandhi');
+
+insert into adoption values('5','1','10006');
+
+select c.course_no,a.book_ISBN,t.book_title,c.cname from course c,text t,adoption a where c.course_no=a.course_no and a.book_ISBN=t.book_ISBN and c.dept='CS' order by t.book_title;
+
+select c.dept,count(t.book_ISBN) from course c,text t,adoption a where c.course_no=a.course_no and t.book_ISBN=a.book_ISBN and t.publisher='Pearson' group by c.dept;
+
+set pagesize 25;
+set linesize 75;
+ttitle "Student Report";
+btitle "EOF";
+column reg_no format 'a15';
+column name format 'a15';
+column cname format 'a15';
+column sem format 'a15';
+column marks format 99;
+
+select s.reg_no,s.name,c.cname,e.sem,e.marks from student s,course c,enroll e where s.reg_no=e.reg_no and c.course_no=e.course_no;
+
+set pagesize 25;
+set linesize 75;
+ttitle "Book Report";
+btitle "EOF";
+column course_no format 'a15';
+column book_ISBN format 99999;
+column book_title format 'a15';
+column sem format 'a15';
+
+select c.course_no,t.book_ISBN,t.book_title,a.sem from course c,text t,adoption a where t.book_ISBN=a.book_ISBN and c.course_no=a.course_no;
+
