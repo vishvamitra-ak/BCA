@@ -1,0 +1,29 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    background-color: white;
+    color:#555;
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 22px;
+    text-rendering: optimizeLegibility;
+}
+
+.row {
+    max-width: 1600px;
+    margin: 0 auto;
+}
+.car {
+    margin-top: 0;
+    height: 100vh;
+    
+}
+.carousel-inner img {
+    margin-top: 0;
+      width: 100%;
+      height: 100vh;
+  }
